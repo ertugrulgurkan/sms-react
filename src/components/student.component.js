@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import StudentDataService from "../services/student.service";
+import Select from 'react-select';
+import courseDataService from "../services/course.service";
 
 export default class Student extends Component {
     constructor(props) {
@@ -15,10 +17,12 @@ export default class Student extends Component {
 
         this.state = {
             currentStudent: {
+                Course: [],
                 id: "",
                 firstName: "",
                 lastName: "",
                 phoneNumber:"",
+                courses:"",
                 studentNumber:"",
             },
             message: ""
@@ -27,6 +31,7 @@ export default class Student extends Component {
 
     componentDidMount() {
         this.getStudent(this.props.match.params.id);
+        this.retrieveCourse();
     }
 
     onChangeFirstName(e) {
@@ -89,8 +94,11 @@ export default class Student extends Component {
             firstName: this.state.currentStudent.firstName,
             lastName: this.state.currentStudent.lastName,
             phoneNumber:this.state.currentStudent.phoneNumber,
-            studentNumber:this.state.currentStudent.studentNumber
+            studentNumber:this.state.currentStudent.studentNumber,
+            courses:this.state.courses
         };
+
+        console.log(data)
         StudentDataService.update(
             this.state.currentStudent.id,
             data
@@ -116,13 +124,44 @@ export default class Student extends Component {
                 console.log(e);
             });
     }
+    retrieveCourse() {
+        courseDataService.getAll()
+            .then(response => {
+                this.setState({
+                    Course: response.data
+                });
+                console.log(response.data);
+            })
+            .catch(e => {
+                console.log(e);
+            });
+    }
+    handleChange = selectedOption => {
+        this.setState({
+            courses:selectedOption
+        });
+    };
+
 
     render() {
-        const { currentStudent } = this.state;
+        const { currentStudent , Course } = this.state;
+        let filters = [];
+        if (Course != null && filters.length ==0){
+            Course.forEach(item => {
+                const filter = {
+                    label: item.courseName,
+                    value: item.id,
+                    id:item.id,
+                    year:item.year,
+                    numberOfClasses:item.numberOfClasses
+                };
+                filters.push(filter);
+            });
+        }
 
         return (
             <div>
-                {currentStudent ? (
+                {currentStudent && filters ? (
                     <div className="edit-form">
                         <h4>Student</h4>
                         <form>
@@ -177,6 +216,19 @@ export default class Student extends Component {
                                     value={currentStudent.phoneNumber}
                                 />
                             </div>
+
+                            <div className="form-group">
+                                <label htmlFor="courseList">Course List</label>
+                                <Select
+                                    isMulti
+                                    name="courseList"
+                                    options={filters}
+                                    onChange={this.handleChange}
+                                    className="basic-multi-select"
+                                    classNamePrefix="select"
+                                />
+                            </div>
+
                         </form>
                         <button
                             className="btn btn-danger"

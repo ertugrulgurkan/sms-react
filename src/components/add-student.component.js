@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import StudentDataService from "../services/student.service";
-
+import courseDataService from "../services/course.service";
+import Select from 'react-select';
 export default class AddStudent extends Component {
     constructor(props) {
         super(props);
         this.saveStudent = this.saveStudent.bind(this);
         this.newStudent = this.newStudent.bind(this);
-
         this.onChangeFirstName = this.onChangeFirstName.bind(this);
         this.onChangeLastName = this.onChangeLastName.bind(this);
         this.onChangePhoneNumber = this.onChangePhoneNumber.bind(this);
@@ -14,14 +14,18 @@ export default class AddStudent extends Component {
 
 
         this.state = {
-            id: null,
+            Course: [],
+            id: "",
             firstName: "",
             lastName: "",
             phoneNumber:"",
             studentNumber:"",
-
+            courses:"",
             submitted: false
         };
+    }
+    componentDidMount() {
+        this.retrieveCourse();
     }
 
     onChangeFirstName(e) {
@@ -51,9 +55,9 @@ export default class AddStudent extends Component {
             firstName: this.state.firstName,
             lastName: this.state.lastName,
             phoneNumber:this.state.phoneNumber,
-            studentNumber:this.state.studentNumber
+            studentNumber:this.state.studentNumber,
+            courses:this.state.courses
         };
-
         StudentDataService.create(data)
             .then(response => {
                 this.setState({
@@ -62,7 +66,7 @@ export default class AddStudent extends Component {
                     lastName: response.data.lastName,
                     phoneNumber: response.data.phoneNumber,
                     studentNumber: response.data.studentNumber,
-
+                    courses:response.data.courses,
                     submitted: true
                 });
                 this.props.history.push('/students')
@@ -85,11 +89,46 @@ export default class AddStudent extends Component {
         });
     }
 
+    retrieveCourse() {
+        courseDataService.getAll()
+            .then(response => {
+                this.setState({
+                    Course: response.data
+                });
+                console.log(response.data);
+            })
+            .catch(e => {
+                console.log(e);
+            });
+    }
+
+
     onSubmit = e => {
         e.preventDefault();
     };
+    handleChange = selectedOption => {
+        this.setState({
+            courses:selectedOption
+        });
+    };
 
     render() {
+        const {Course} = this.state;
+        let filters = [];
+        if (Course != null && filters.length === 0){
+            Course.forEach(item => {
+                const filter = {
+                    label: item.courseName,
+                    value: item.id,
+                    courseName:item.courseName,
+                    id:item.id,
+                    year:item.year,
+                    numberOfClasses:item.numberOfClasses
+                };
+                filters.push(filter);
+            });
+        }
+
         return (
             <div className="submit-form">
                 <form noValidate onSubmit={this.onSubmit}>
@@ -150,7 +189,17 @@ export default class AddStudent extends Component {
                             />
                         </div>
 
-
+                        <div className="form-group">
+                            <label htmlFor="courseList">Course List</label>
+                            <Select
+                                isMulti
+                                name="courseList"
+                                options={filters}
+                                onChange={this.handleChange}
+                                className="basic-multi-select"
+                                classNamePrefix="select"
+                            />
+                        </div>
                         <button type="submit" onClick={this.saveStudent} className="btn btn-success">
                             Add
                         </button>

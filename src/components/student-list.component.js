@@ -152,6 +152,24 @@ export default class StudentList extends Component {
                                 {currentStudent.phoneNumber}
                             </div>
 
+                            <div>
+                                <label>
+                                    <strong>Courses:</strong>
+
+                                <ul className="list-group">
+                                    {currentStudent.courses &&
+                                    currentStudent.courses.map((course, index) => (
+                                        <li
+                                            key={index}
+                                        >
+                                            {course.id}
+                                            {" "+ course.courseName}
+                                        </li>
+                                    ))}
+                                </ul>
+                                </label>
+                            </div>
+
                             <Link to={"/students/" + currentStudent.id}
                                 className="btn btn-warning">
                                 Edit
