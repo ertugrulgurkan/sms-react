@@ -97,6 +97,12 @@ export default class Course extends Component {
             });
     }
 
+
+    handleSubmit = e => {
+        e.preventDefault();
+        this.updateCourse();
+    }
+
     deleteCourse() {
         CourseDataService.delete(this.state.currentCourse.id)
             .then(response => {
@@ -116,7 +122,7 @@ export default class Course extends Component {
                 {currentCourse ? (
                     <div className="edit-form">
                         <h4>Course</h4>
-                        <form>
+                        <form onSubmit={this.handleSubmit}>
                             <div className="form-group">
                                 <label htmlFor="id">ID</label>
                                 <input
@@ -133,6 +139,7 @@ export default class Course extends Component {
                                     type="text"
                                     className="form-control"
                                     id="courseName"
+                                    required
                                     onChange={this.onChangeCourseName}
                                     value={currentCourse.courseName}
                                 />
@@ -143,6 +150,7 @@ export default class Course extends Component {
                                     type="number"
                                     className="form-control"
                                     id="numberOfClasses"
+                                    required
                                     onChange={this.onChangeNumberOfClasses}
                                     value={currentCourse.numberOfClasses}
                                 />
@@ -153,26 +161,24 @@ export default class Course extends Component {
                                     type="number"
                                     className="form-control"
                                     id="year"
+                                    required
                                     onChange={this.onChangeYear}
                                     value={currentCourse.year}
                                 />
                             </div>
-
+                            <button
+                                className="btn btn-danger"
+                                onClick={this.deleteCourse}>
+                                Delete
+                            </button>
+                            {" "}
+                            <button
+                                type="submit"
+                                className="btn btn-success">
+                                Update
+                            </button>
                         </form>
-                        <button
-                            className="btn btn-danger"
-                            onClick={this.deleteCourse}
-                        >
-                            Delete
-                        </button>
-                        {" "}
-                        <button
-                            type="submit"
-                            className="btn btn-success"
-                            onClick={this.updateCourse}
-                        >
-                            Update
-                        </button>
+
                         <p>{this.state.message}</p>
                     </div>
                 ) : (

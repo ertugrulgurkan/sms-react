@@ -74,14 +74,15 @@ export default class AddCourse extends Component {
         });
     }
 
-    onSubmit = e => {
+    handleSubmit = e => {
         e.preventDefault();
+        this.saveCourse();
     };
 
     render() {
         return (
             <div className="submit-form">
-                <form noValidate onSubmit={this.onSubmit}>
+                <form noValidate onSubmit={this.handleSubmit}>
                 {this.state.submitted ? (
                     <div>
                         <h4>You submitted successfully!</h4>
@@ -129,7 +130,7 @@ export default class AddCourse extends Component {
                                 name="year"
                             />
                         </div>
-                        <button type="submit" onClick={this.saveCourse} className="btn btn-success">
+                        <button type="submit" className="btn btn-success">
                             Add
                         </button>
                     </div>

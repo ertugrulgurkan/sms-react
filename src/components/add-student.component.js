@@ -103,9 +103,11 @@ export default class AddStudent extends Component {
     }
 
 
-    onSubmit = e => {
+    handleSubmit = e => {
         e.preventDefault();
-    };
+        this.saveStudent();
+    }
+
     handleChange = selectedOption => {
         this.setState({
             courses:selectedOption
@@ -131,7 +133,7 @@ export default class AddStudent extends Component {
 
         return (
             <div className="submit-form">
-                <form noValidate onSubmit={this.onSubmit}>
+                <form onSubmit={this.handleSubmit}>
                 {this.state.submitted ? (
                     <div>
                         <h4>You submitted successfully!</h4>
@@ -200,7 +202,7 @@ export default class AddStudent extends Component {
                                 classNamePrefix="select"
                             />
                         </div>
-                        <button type="submit" onClick={this.saveStudent} className="btn btn-success">
+                        <button type="submit" className="btn btn-success">
                             Add
                         </button>
                     </div>

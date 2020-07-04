@@ -142,6 +142,11 @@ export default class Student extends Component {
         });
     };
 
+    handleSubmit = e => {
+        e.preventDefault();
+        this.updateStudent();
+    }
+
 
     render() {
         const { currentStudent , Course } = this.state;
@@ -164,7 +169,7 @@ export default class Student extends Component {
                 {currentStudent && filters ? (
                     <div className="edit-form">
                         <h4>Student</h4>
-                        <form>
+                        <form onSubmit={this.handleSubmit}>
                             <div className="form-group">
                                 <label htmlFor="id">ID</label>
                                 <input
@@ -181,6 +186,7 @@ export default class Student extends Component {
                                     type="text"
                                     className="form-control"
                                     id="firstName"
+                                    required
                                     onChange={this.onChangeFirstName}
                                     value={currentStudent.firstName}
                                 />
@@ -191,6 +197,7 @@ export default class Student extends Component {
                                     type="text"
                                     className="form-control"
                                     id="LastName"
+                                    required
                                     onChange={this.onChangeLastName}
                                     value={currentStudent.lastName}
                                 />
@@ -199,7 +206,7 @@ export default class Student extends Component {
                             <div className="form-group">
                                 <label htmlFor="studentNumber">Student Number</label>
                                 <input
-                                    type="text"
+                                    type="number"
                                     className="form-control"
                                     id="studentNumber"
                                     onChange={this.onChangeStudentNumber}
@@ -209,9 +216,10 @@ export default class Student extends Component {
                             <div className="form-group">
                                 <label htmlFor="phoneNumber">Phone Number</label>
                                 <input
-                                    type="text"
+                                    type="number"
                                     className="form-control"
                                     id="phoneNumber"
+                                    required
                                     onChange={this.onChangePhoneNumber}
                                     value={currentStudent.phoneNumber}
                                 />
@@ -228,22 +236,22 @@ export default class Student extends Component {
                                     classNamePrefix="select"
                                 />
                             </div>
-
+                            <button
+                                className="btn btn-danger"
+                                type="submit"
+                                onClick={this.deleteStudent}
+                            >
+                                Delete
+                            </button>
+                            {" "}
+                            <button
+                                type="submit"
+                                className="btn btn-success"
+                            >
+                                Update
+                            </button>
                         </form>
-                        <button
-                            className="btn btn-danger"
-                            onClick={this.deleteStudent}
-                        >
-                            Delete
-                        </button>
-                        {" "}
-                        <button
-                            type="submit"
-                            className="btn btn-success"
-                            onClick={this.updateStudent}
-                        >
-                            Update
-                        </button>
+
                         <p>{this.state.message}</p>
                     </div>
                 ) : (
