@@ -7,7 +7,9 @@ import Student from "./components/student.component";
 import StudentsList from "./components/student-list.component";
 import Course from "./components/course.component";
 import CourseList from "./components/course-list.component";
-import AddCourse from "./components/add-course.component";
+import Teacher from "./components/teacher.component";
+import AddTeacher from "./components/add-teacher.component";
+import TeacherList from "./components/teacher-list.component";
 
 
 class App extends Component {
@@ -26,6 +28,11 @@ class App extends Component {
                   </Link>
                 </li>
                 <li className="nav-item">
+                  <Link to={"/teachers"} className="nav-link">
+                    Teachers
+                  </Link>
+                </li>
+                <li className="nav-item">
                   <Link to={"/courses"} className="nav-link">
                     Courses
                   </Link>
@@ -39,8 +46,11 @@ class App extends Component {
                 <Route exact path="/students/add" component={AddStudent} />
                 <Route path="/students/:id" component={Student} />
 
+                <Route exact path={"/teachers"} component={TeacherList} />
+                <Route exact path="/teachers/add" component={AddTeacher} />
+                <Route path="/teachers/:id" component={Teacher} />
+
                 <Route exact path={"/courses"} component={CourseList} />
-                <Route exact path="/courses/add" component={AddCourse} />
                 <Route path="/courses/:id" component={Course} />
 
               </Switch>

@@ -109,10 +109,7 @@ export default class CourseList extends Component {
                             </li>
                         ))}
                     </ul>
-                    <br/>
-                    <Link to={"/courses/add"} className="btn btn-outline-primary">
-                        Add Course
-                    </Link>
+
 
                 </div>
                 <div className="col-md-6">

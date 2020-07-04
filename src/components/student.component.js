@@ -22,7 +22,7 @@ export default class Student extends Component {
                 firstName: "",
                 lastName: "",
                 phoneNumber:"",
-                courses:"",
+                courses: [],
                 studentNumber:"",
             },
             message: ""

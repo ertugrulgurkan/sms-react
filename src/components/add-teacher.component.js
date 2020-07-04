@@ -1,16 +1,16 @@
 import React, { Component } from "react";
-import StudentDataService from "../services/student.service";
+import TeacherDataService from "../services/teacher.service";
 import courseDataService from "../services/course.service";
 import Select from 'react-select';
-export default class AddStudent extends Component {
+export default class AddTeacher extends Component {
     constructor(props) {
         super(props);
-        this.saveStudent = this.saveStudent.bind(this);
-        this.newStudent = this.newStudent.bind(this);
+        this.saveTeacher = this.saveTeacher.bind(this);
+        this.newTeacher = this.newTeacher.bind(this);
         this.onChangeFirstName = this.onChangeFirstName.bind(this);
         this.onChangeLastName = this.onChangeLastName.bind(this);
         this.onChangePhoneNumber = this.onChangePhoneNumber.bind(this);
-        this.onChangeStudentNumber = this.onChangeStudentNumber.bind(this);
+        this.onChangeTitle = this.onChangeTitle.bind(this);
 
 
         this.state = {
@@ -19,8 +19,8 @@ export default class AddStudent extends Component {
             firstName: "",
             lastName: "",
             phoneNumber:"",
-            studentNumber:"",
-            courses: [],
+            title:"",
+            courses:[],
             submitted: false
         };
     }
@@ -44,32 +44,33 @@ export default class AddStudent extends Component {
             phoneNumber: e.target.value
         });
     }
-    onChangeStudentNumber(e) {
+    onChangeTitle(e) {
         this.setState({
-            studentNumber: e.target.value
+            title: e.target.value
         });
     }
-    saveStudent() {
+    saveTeacher() {
         var data = {
             id: this.state.id,
             firstName: this.state.firstName,
             lastName: this.state.lastName,
             phoneNumber:this.state.phoneNumber,
-            studentNumber:this.state.studentNumber,
+            title:this.state.title,
             courses:this.state.courses
         };
-        StudentDataService.create(data)
+        console.log(data)
+        TeacherDataService.create(data)
             .then(response => {
                 this.setState({
                     id: response.data.id,
                     firstName: response.data.firstName,
                     lastName: response.data.lastName,
                     phoneNumber: response.data.phoneNumber,
-                    studentNumber: response.data.studentNumber,
+                    title: response.data.title,
                     courses:response.data.courses,
                     submitted: true
                 });
-                this.props.history.push('/students')
+                this.props.history.push('/teachers')
                 console.log(response.data);
             })
             .catch(e => {
@@ -77,13 +78,13 @@ export default class AddStudent extends Component {
             });
     }
 
-    newStudent() {
+    newTeacher() {
         this.setState({
             id: null,
             firstName: "",
             lastName: "",
             phoneNumber:"",
-            studentNumber:"",
+            title:"",
 
             submitted: false
         });
@@ -105,7 +106,7 @@ export default class AddStudent extends Component {
 
     handleSubmit = e => {
         e.preventDefault();
-        this.saveStudent();
+        this.saveTeacher();
     }
 
     handleChange = selectedOption => {
@@ -137,7 +138,7 @@ export default class AddStudent extends Component {
                 {this.state.submitted ? (
                     <div>
                         <h4>You submitted successfully!</h4>
-                        <button className="btn btn-success" onClick={this.newStudent}>
+                        <button className="btn btn-success" onClick={this.newTeacher}>
                             Add
                         </button>
                     </div>
@@ -169,14 +170,14 @@ export default class AddStudent extends Component {
                         </div>
 
                         <div className="form-group">
-                            <label htmlFor="studentNumber">Student Number</label>
+                            <label htmlFor="title">Title</label>
                             <input
-                                type="number"
+                                type="text"
                                 className="form-control"
-                                id="studentNumber"
+                                id="title"
                                 required
-                                onChange={this.onChangeStudentNumber}
-                                value={this.state.studentNumber}
+                                onChange={this.onChangeTitle}
+                                value={this.state.title}
                             />
                         </div>
                         <div className="form-group">
@@ -191,17 +192,6 @@ export default class AddStudent extends Component {
                             />
                         </div>
 
-                        <div className="form-group">
-                            <label htmlFor="courseList">Course List</label>
-                            <Select
-                                isMulti
-                                name="courseList"
-                                options={filters}
-                                onChange={this.handleChange}
-                                className="basic-multi-select"
-                                classNamePrefix="select"
-                            />
-                        </div>
                         <button type="submit" className="btn btn-success">
                             Add
                         </button>
