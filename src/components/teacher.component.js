@@ -134,20 +134,13 @@ export default class Teacher extends Component {
 
     updateTeacher() {
 
-        let courses = this.state.currentTeacher.courses;
-        const filter = {
-            courseName:this.state.newCourse.courseName,
-            year:this.state.newCourse.year,
-            numberOfClasses:this.state.newCourse.numberOfClasses
-        };
-        courses.push(filter);
         let data = {
             id: this.state.currentTeacher.id,
             firstName: this.state.currentTeacher.firstName,
             lastName: this.state.currentTeacher.lastName,
             phoneNumber:this.state.currentTeacher.phoneNumber,
             title:this.state.currentTeacher.title,
-            courses:courses
+            courses:this.state.currentTeacher.courses
         };
         console.log(data)
         TeacherDataService.update(
@@ -164,7 +157,38 @@ export default class Teacher extends Component {
                 console.log(e);
             });
     }
+    updateTeacherForNewCourse() {
 
+        let courses = this.state.currentTeacher.courses;
+        const filter = {
+            courseName:this.state.newCourse.courseName,
+            year:this.state.newCourse.year,
+            numberOfClasses:this.state.newCourse.numberOfClasses
+        };
+        courses.push(filter);
+        let data = {
+            id: this.state.currentTeacher.id,
+            firstName: this.state.currentTeacher.firstName,
+            lastName: this.state.currentTeacher.lastName,
+            phoneNumber:this.state.currentTeacher.phoneNumber,
+            title:this.state.currentTeacher.title,
+            courses: [filter]
+        };
+        console.log(data)
+        TeacherDataService.update(
+            this.state.currentTeacher.id,
+            data
+        )
+            .then(response => {
+                console.log(response.data);
+                this.setState({
+                    message: "The Teacher was updated successfully!"
+                });
+            })
+            .catch(e => {
+                console.log(e);
+            });
+    }
 
 
     deleteTeacher() {
@@ -189,17 +213,15 @@ export default class Teacher extends Component {
                 console.log(e);
             });
     }
-    handleChange = selectedOption => {
-        this.setState({
-            courses:selectedOption
-        });
-    };
 
-    handleSubmit = e => {
+    handleSubmitEditTeacherForm = e => {
         e.preventDefault();
         this.updateTeacher();
     }
-
+    handleSubmitAddCourseForm = e => {
+        e.preventDefault();
+        this.updateTeacherForNewCourse();
+    }
 
     render() {
         const { currentTeacher , Course } = this.state;
@@ -209,7 +231,7 @@ export default class Teacher extends Component {
                 {currentTeacher ? (
                     <div className="edit-form">
                         <h4>Teacher</h4>
-                        <form onSubmit={this.handleSubmit}>
+                        <form onSubmit={this.handleSubmitEditTeacherForm}>
                             <div className="form-group">
                                 <label htmlFor="id">ID</label>
                                 <input
@@ -292,7 +314,7 @@ export default class Teacher extends Component {
                 <h4>Add Course</h4>
 
                 <div className="submit-form">
-                    <form onSubmit={this.handleSubmit}>
+                    <form onSubmit={this.handleSubmitAddCourseForm}>
                         {this.state.submitted ? (
                             <div>
                                 <h4>You submitted successfully!</h4>
